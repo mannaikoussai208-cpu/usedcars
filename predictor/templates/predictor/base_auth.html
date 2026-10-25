@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}UsedCar AI{% endblock %}</title>
+
+    <link rel="stylesheet"
+          href="{% static 'predictor/css/auth.css' %}">
+</head>
+<body>
+    <main class="auth-page">
+        <section class="auth-card">
+            <a class="brand" href="{% url 'predictor:login' %}">
+                <span class="brand-icon">UC</span>
+                <span>UsedCar<span class="brand-accent"> AI</span></span>
+            </a>
+
+            {% block content %}{% endblock %}
+        </section>
+
+        <p class="page-footer">
+            UsedCar AI · Smarter decisions, better car deals
+        </p>
+    </main>
+</body>
+</html>

@@ -1,0 +1,82 @@
+
+{% extends 'predictor/base_auth.html' %}
+
+{% block title %}Car Price Estimator | UsedCar AI{% endblock %}
+
+{% block content %}
+<div class="auth-heading">
+    <p class="eyebrow">USEDCAR AI</p>
+    <h1>Estimate your car's value</h1>
+    <p>Enter the vehicle details to prepare a market price estimate.</p>
+</div>
+
+<form method="post" class="auth-form">
+    {% csrf_token %}
+
+    {% for field in form %}
+        <div class="form-field">
+            {{ field.label_tag }}
+            {{ field }}
+
+            {% for error in field.errors %}
+                <p class="error-message">{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+    <button type="submit" class="primary-button">
+        Estimate price
+    </button>
+</form>
+
+<script>
+    const modelsByBrand = {{ models_by_brand_json|safe }};
+
+    const brandSelect = document.getElementById("id_brand");
+    const modelSelect = document.getElementById("id_model");
+
+    function updateModels() {
+        const selectedBrand = brandSelect.value;
+        const models = modelsByBrand[selectedBrand] || [];
+
+        // Remember the selected model if it is still available.
+        const previousModel = modelSelect.value;
+
+        modelSelect.innerHTML = "";
+
+        const placeholder = document.createElement("option");
+        placeholder.value = "";
+        placeholder.textContent = selectedBrand
+            ? "Select a model"
+            : "Select a brand first";
+
+        modelSelect.appendChild(placeholder);
+
+        models.forEach(function (model) {
+            const option = document.createElement("option");
+            option.value = model;
+            option.textContent = model;
+
+            if (model === previousModel) {
+                option.selected = true;
+            }
+
+            modelSelect.appendChild(option);
+        });
+    }
+
+    brandSelect.addEventListener("change", updateModels);
+
+    updateModels();
+</script>
+
+<form method="post"
+      action="{% url 'predictor:logout' %}"
+      style="margin-top: 16px;">
+    {% csrf_token %}
+
+    <button type="submit" class="primary-button">
+        Log out
+    </button>
+</form>
+{% endblock %}

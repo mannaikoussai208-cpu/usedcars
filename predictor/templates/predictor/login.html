@@ -1,0 +1,42 @@
+{% extends 'predictor/base_auth.html' %}
+
+{% block title %}Log In | UsedCar AI{% endblock %}
+
+{% block content %}
+<div class="auth-heading">
+    <p class="eyebrow">WELCOME BACK</p>
+    <h1>Log in to your account</h1>
+    <p>Continue your journey toward smarter car purchases.</p>
+</div>
+
+<form method="post" class="auth-form">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+        <div class="error-message">
+            Your username or password is incorrect.
+            Please try again.
+        </div>
+    {% endif %}
+
+    {% for field in form %}
+        <div class="form-field">
+            {{ field.label_tag }}
+            {{ field }}
+
+            {% for error in field.errors %}
+                <p class="error-message">{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+    <button type="submit" class="primary-button">
+        Log in
+    </button>
+</form>
+
+<p class="auth-switch">
+    Don't have an account?
+    <a href="{% url 'predictor:register' %}">Create one</a>
+</p>
+{% endblock %}
